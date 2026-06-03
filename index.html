@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Letho</title>
-    <!-- Google Fonts for premium typography -->
+    <!-- Premium Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Canvas Confetti Library for the celebration -->
+    <!-- Confetti Effects -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* Smooth, moving gradient background to fill the empty white space */
         body {
             margin: 0;
             padding: 0;
@@ -35,69 +34,83 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism card container - looks modern and substantial */
         .card {
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.78);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 3rem 2.5rem;
+            padding: 2.5rem;
             border-radius: 24px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
             text-align: center;
-            max-width: 580px;
+            max-width: 550px;
             width: 90%;
             transition: all 0.5s ease;
+        }
+
+        /* The dynamic reaction image slot */
+        .illustration-container {
+            width: 100%;
+            height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .illustration-container img {
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
         }
 
         h1 {
             font-family: 'Playfair Display', serif;
             color: #3a3330;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             margin-top: 0;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             font-weight: 600;
         }
 
         p.message {
             color: #5c534e;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 2rem;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
         }
 
         h2.question {
             font-family: 'Playfair Display', serif;
             color: #2c2523;
-            font-size: 1.6rem;
-            margin-bottom: 2.5rem;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
             font-weight: 500;
         }
 
-        /* Button Layout updates */
         .btn-container {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
             align-items: center;
-            flex-wrap: wrap;
+            min-height: 60px; /* Keeps layout stable when button moves */
         }
 
         button {
-            padding: 0.8rem 2rem;
+            padding: 0.8rem 2.2rem;
             font-size: 1rem;
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 500;
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.2s ease, background-color 0.3s ease;
         }
 
         .btn-yes {
             background-color: #9c849c;
             color: white;
-            box-shadow: 0 4px 15px rgba(156, 132, 156, 0.3);
+            box-shadow: 0 4px 15px rgba(156, 132, 156, 0.25);
         }
 
         .btn-yes:hover {
@@ -105,21 +118,22 @@
             background-color: #887088;
         }
 
-        .btn-maybe {
+        .btn-no {
             background-color: #f0eae1;
             color: #706561;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            /* Smooth transitions for moving position smoothly */
+            transition: left 0.2s ease, top 0.2s ease, background-color 0.3s ease; 
         }
 
-        /* Smoothly revealing the final message */
         .success-message {
             display: none;
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: #8c6b78;
             font-style: italic;
-            animation: fadeIn 1s ease forwards;
+            animation: fadeIn 0.8s ease forwards;
         }
 
         @keyframes fadeIn {
@@ -130,49 +144,94 @@
 </head>
 <body>
 
+    <!-- Background Music Player -->
+    <audio id="backgroundMusic" loop prefetch="auto">
+        <source src="our-song.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="card">
+        <!-- Reaction GIF container -->
+        <div class="illustration-container">
+            <img id="reactionImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW9pZ29pZ3V5Ym95bHNoY2Z3bXh6bXN3ZzV5ZXp0cmM0bms0bXF6ZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/C0b7gLBSatscbUIj29/giphy.gif" alt="Cute Illustration">
+        </div>
+
         <h1>Dear Letho</h1>
-        <p class="message">
+        <p class="message" id="mainMessage">
             Since February, getting to know you has become one of my favourite things. 
             I admire your intelligence, your spirit, and how you tell stories in a way 
             that stays with me. I don't know what the future looks like—but I know I want to ask this.
         </p>
         
-        <h2 class="question">Will you be my answered prayer? 💖</h2>
+        <h2 class="question" id="questionText">Will you be my answered prayer? 💖</h2>
 
-        <div class="btn-container">
+        <div class="btn-container" id="controls">
             <button class="btn-yes" id="yesBtn" onclick="celebrate()">Yes 💖</button>
-            <button class="btn-maybe" id="maybeBtn" onmouseover="dodgeButton()" onclick="dodgeButton()">I need a moment 🥺</button>
+            <button class="btn-no" id="noBtn" onmouseover="handleNo()" onclick="handleNo()">I need a moment 🥺</button>
         </div>
 
         <div class="success-message" id="successResponse">
-            Best decision of 2026 🎉💖
+            Best decision of 2026 🎉💝
         </div>
     </div>
 
     <script>
-        // High-end confetti explosion sequence
-        function celebrate() {
-            // Display the success text smoothly
-            const successText = document.getElementById('successResponse');
-            successText.style.display = 'block';
+        let musicStarted = false;
 
-            // Fire side-cannon confetti bursts
-            var duration = 3 * 1000;
+        function startMusic() {
+            if (!musicStarted) {
+                const music = document.getElementById('backgroundMusic');
+                music.volume = 0.35; 
+                music.play().catch(e => console.log("Audio waiting for full focus"));
+                musicStarted = true;
+            }
+        }
+
+        // Triggered when she hovers over or clicks "I need a moment"
+        function handleNo() {
+            startMusic();
+            
+            // 1. Change image to a sad/crying reaction GIF
+            document.getElementById('reactionImg').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHI0ZzN3cnIwaDJ3M3Y0MXZ0ZzR3ZXN0bXp6bDJjZzVndmZ6cWpxOCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/vYIDdEGsNMfK78w8Bv/giphy.gif";
+            
+            // 2. Playfully teleport the button away just like the TikTok video
+            const button = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - button.offsetWidth - 60) + 30;
+            const y = Math.random() * (window.innerHeight - button.offsetHeight - 60) + 30;
+            
+            button.style.position = 'fixed';
+            button.style.left = x + 'px';
+            button.style.top = y + 'px';
+        }
+
+        // Triggered when she clicks "Yes"
+        function celebrate() {
+            startMusic();
+
+            // 1. Change image to a happy celebration GIF
+            document.getElementById('reactionImg').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3VvM3RtOHQ4cHhlOHV5bGlqN2kyM3o0NXN2dXZ3ZndmOHBwZHp0byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/C7Y7D6K03ZfJvS8ILe/giphy.gif";
+
+            // 2. Hide the option buttons cleanly
+            document.getElementById('controls').style.display = 'none';
+
+            // 3. Show the final romantic response message
+            document.getElementById('successResponse').style.display = 'block';
+
+            // 4. Launch continuous side-cannon confetti shower
+            var duration = 4 * 1000;
             var end = Date.now() + duration;
 
             (function frame() {
                 confetti({
-                    particleCount: 3,
+                    particleCount: 4,
                     angle: 60,
-                    spread: 55,
+                    spread: 60,
                     origin: { x: 0 },
                     colors: ['#bb9bb4', '#e8dfd3', '#8c6b78']
                 });
                 confetti({
-                    particleCount: 3,
+                    particleCount: 4,
                     angle: 120,
-                    spread: 55,
+                    spread: 60,
                     origin: { x: 1 },
                     colors: ['#bb9bb4', '#e8dfd3', '#8c6b78']
                 });
@@ -181,18 +240,6 @@
                     requestAnimationFrame(frame);
                 }
             }());
-        }
-
-        // Playful script to make the "I need a moment" button jump away dynamically
-        function dodgeButton() {
-            const button = document.getElementById('maybeBtn');
-            // Calculate a random screen position within reasonable limits
-            const x = Math.random() * (window.innerWidth - button.offsetWidth - 40) + 20;
-            const y = Math.random() * (window.innerHeight - button.offsetHeight - 40) + 20;
-            
-            button.style.position = 'fixed';
-            button.style.left = x + 'px';
-            button.style.top = y + 'px';
         }
     </script>
 
